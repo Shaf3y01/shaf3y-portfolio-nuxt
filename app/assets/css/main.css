@@ -1,0 +1,26 @@
+
+@import "tailwindcss";
+
+/* 2. define custom theme tokens (this replaces tailwind.config.js extend.colors) */
+@theme {
+  --color-eerie: #222823;
+  --color-seasalt: #F4F7F5;
+  --color-lilac: #B69EBF;
+  --color-byzantium: #74226C;
+
+  --shadow-glow-purple: 0 0 40px rgba(116, 34, 108, 0.5);
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+/* 3. global base styles */
+@layer base {
+  body {
+    @apply bg-eerie text-seasalt antialiased;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
