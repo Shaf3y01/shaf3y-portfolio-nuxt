@@ -213,7 +213,7 @@ onBeforeUnmount(() => {
           <!-- WhatsApp -->
           <li>
             <a
-              href="https://wa.me/201068494959?text=Hi%20Mahmoud%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect!"
+              href="https://wa.me/201068493655?text=Hi%20Mahmoud%2C%20I%20found%20your%20portfolio%20and%20would%20like%20to%20connect!"
               target="_blank"
               rel="noopener noreferrer"
               class="group flex items-center gap-2 hover:text-seasalt text-lilac transition"
@@ -224,7 +224,7 @@ onBeforeUnmount(() => {
                 class="size-5 group-hover:scale-110 transition-transform"
                 aria-hidden="true"
               />
-              <span>+20 106 849 4959</span>
+              <span>+20 106 849 3655</span>
             </a>
           </li>
         </ul>
