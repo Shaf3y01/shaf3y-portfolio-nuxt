@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
               target="_blank"
               rel="noopener noreferrer"
               class="group flex items-center gap-2 hover:text-seasalt text-lilac transition"
-              aria-label="Send a WhatsApp message to plus 20 106 849 4959"
+              aria-label="Send a WhatsApp message to plus 20 106 849 3655"
             >
               <Icon
                 name="mdi:whatsapp"
