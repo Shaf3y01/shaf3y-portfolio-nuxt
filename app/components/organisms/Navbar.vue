@@ -69,12 +69,13 @@ const links = [
       class="max-w-7xl mx-auto flex items-center justify-between px-6 py-4"
     >
       <!-- Logo / Name -->
-      <div
+      <button
         @click="scrollToSection('top')"
-        class="cursor-pointer select-none font-semibold text-seasalt text-lg md:text-xl hover:text-lilac transition"
+        class="cursor-pointer select-none font-semibold text-seasalt text-lg md:text-xl hover:text-lilac transition bg-transparent border-none p-0"
+        aria-label="Scroll to top"
       >
         My <span class="text-lilac">Curriculum Vitae</span>
-      </div>
+      </button>
 
       <!-- Desktop links -->
       <ul
@@ -83,13 +84,16 @@ const links = [
         <li
           v-for="link in links"
           :key="link.id"
-          @click="scrollToSection(link.id)"
-          class="cursor-pointer transition-all duration-200"
-          :class="activeSection === link.id
-            ? 'text-lilac border-b border-lilac pb-[2px]'
-            : 'hover:text-seasalt hover:scale-105'"
         >
-          {{ link.name }}
+          <button
+            @click="scrollToSection(link.id)"
+            class="cursor-pointer transition-all duration-200 bg-transparent border-none p-0"
+            :class="activeSection === link.id
+              ? 'text-lilac border-b border-lilac pb-[2px]'
+              : 'hover:text-seasalt hover:scale-105'"
+          >
+            {{ link.name }}
+          </button>
         </li>
       </ul>
 
@@ -97,6 +101,7 @@ const links = [
       <button
         class="md:hidden text-seasalt/80 hover:text-seasalt transition"
         @click="isOpen = !isOpen"
+        aria-label="Toggle navigation menu"
       >
         <Icon
           :name="isOpen ? 'mdi:close' : 'mdi:menu'"
@@ -111,15 +116,15 @@ const links = [
         v-if="isOpen"
         class="md:hidden flex flex-col items-center gap-4 py-4 bg-white/10 backdrop-blur-xl border-t border-white/10 text-seasalt/90 text-sm"
       >
-        <div
-          v-for="link in links"
-          :key="link.id"
-          @click="scrollToSection(link.id)"
-          class="cursor-pointer hover:text-seasalt transition"
-          :class="activeSection === link.id ? 'text-lilac font-semibold' : ''"
-        >
-          {{ link.name }}
-        </div>
+          <button
+            v-for="link in links"
+            :key="link.id"
+            @click="scrollToSection(link.id)"
+            class="cursor-pointer hover:text-seasalt transition bg-transparent border-none p-0"
+            :class="activeSection === link.id ? 'text-lilac font-semibold' : ''"
+          >
+            {{ link.name }}
+          </button>
       </div>
     </transition>
   </header>

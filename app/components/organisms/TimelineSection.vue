@@ -50,7 +50,7 @@ const items = ref<TimelineItem[]>([
         ],
     },
     {
-        title: 'Full-Stack (JS/Vue/PHP/Laravel/XAMPP) Web Development Diploma',
+        title: 'Full-Stack (Nuxt/Laravel/) Web Development Diploma',
         org: 'AMIT',
         date: '2022 March – 2022 Aug',
         bullets: [

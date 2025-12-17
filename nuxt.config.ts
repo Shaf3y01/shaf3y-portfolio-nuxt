@@ -21,6 +21,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: { lang: "en" },
       title: "Mahmoud El-Shafey | Portfolio",
       meta: [
         {
@@ -52,7 +53,7 @@ export default defineNuxtConfig({
   },
 
   image: {
-    dir: "public",
+    // dir: "public",
     format: ["webp", "png", "jpg"],
   },
 
