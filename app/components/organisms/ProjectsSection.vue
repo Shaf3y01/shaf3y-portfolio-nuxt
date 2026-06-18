@@ -9,10 +9,26 @@ interface Project {
   img: string
   stack: string[]
   github: string
+  link?: string
 }
 
 // static project list
 const projects: Project[] = [
+  {
+    name: 'Emera Developments',
+    desc: 'Professional website for a leading Egyptian construction and real estate company, featuring project showcases, company profile, and contact flows.',
+    img: '/projects/emera-img.png',
+    stack: ['Nuxt', 'Vue', 'TypeScript', 'TailwindCSS'],
+    github: '',
+    link: 'https://emera-developments.vercel.app',
+  },
+  {
+    name: 'Clinic Management PWA',
+    desc: 'Full-featured Progressive Web App built for El-Shorouk Health Office — managing patient records, appointments, and clinic operations with data persistence backed by PostgreSQL.',
+    img: '/projects/clinic-img.png',
+    stack: ['Nuxt', 'Vue', 'PostgreSQL'],
+    github: '',
+  },
   {
     name: 'Grover Grocery App',
     desc: 'Online grocery shopping experience with cart, auth, and real-time live availability.',
@@ -86,6 +102,9 @@ const nextPreview = computed<Project>(() => {
 
 const projectCount = computed<number>(() => projects.length)
 
+const activeUrl = computed(() => activeProject.value.link || activeProject.value.github || '')
+const isLiveLink = computed(() => !!activeProject.value.link)
+
 function nextProject() {
   direction.value = 'next'
   current.value = (current.value + 1) % projects.length
@@ -143,7 +162,8 @@ function prevProject() {
 
       <!-- ACTIVE CARD WITH ANIMATION -->
       <Transition :name="direction === 'next' ? 'swipe-next' : 'swipe-prev'" mode="out-in">
-        <a
+        <component
+          :is="activeUrl ? 'a' : 'div'"
           :key="cardKey"
           class="projects-card group relative z-10 rounded-[var(--radius-2xl)]
                  bg-white/5 backdrop-blur-xl border border-[#4b4f4d]
@@ -152,10 +172,7 @@ function prevProject() {
                  hover:scale-[1.03] hover:border-[#b69ebf] hover:shadow-[0_0_60px_rgba(182,158,191,0.9)]
                  w-full max-w-md sm:max-w-lg md:max-w-xl lg:max-w-2xl
                  flex flex-col overflow-hidden"
-          :href="activeProject.github"
-          target="_blank"
-          rel="noopener noreferrer"
-          :aria-label="`View ${activeProject.name} project on GitHub (opens in a new tab)`"
+          v-bind="activeUrl ? { href: activeUrl, target: '_blank', rel: 'noopener noreferrer', 'aria-label': `View ${activeProject.name} ${isLiveLink ? 'website' : 'on GitHub'} (opens in a new tab)` } : {}"
         >
           <!-- project image / preview -->
           <div class="relative w-full aspect-video bg-eerie/60 border-b border-white/10 overflow-hidden">
@@ -195,16 +212,17 @@ function prevProject() {
                 {{ activeProject.name }}
               </h3>
 
-              <!-- "View Code" mini CTA -->
+              <!-- CTA: live site / github / hidden -->
               <div
+                v-if="activeUrl"
                 class="projects-view-code flex items-center justify-center md:justify-end text-[0.8rem] text-seasalt/60 transition-colors duration-300"
               >
                 <Icon
-                  name="mdi:github"
+                  :name="isLiveLink ? 'mdi:open-in-new' : 'mdi:github'"
                   class="size-4 mr-2 opacity-80 transition-opacity duration-300"
                   aria-hidden="true"
                 />
-                <span class="text-seasalt/70">View Code</span>
+                <span class="text-seasalt/70">{{ isLiveLink ? 'View Site' : 'View Code' }}</span>
               </div>
             </div>
 
@@ -229,7 +247,7 @@ function prevProject() {
               </li>
             </ul>
           </div>
-        </a>
+        </component>
       </Transition>
 
       <!-- Controls -->
