@@ -17,8 +17,9 @@ const skillCards: SkillCard[] = [
     description:
       'I design and build complete user experiences - from landing pages and dashboards all the way to checkout flows and performance tuning.',
     bullets: [
-      'Vue / Nuxt / Tailwind / Pinia',
-      'Responsive UI, animation, component systems',
+      'Vue / Nuxt / TypeScript / Tailwind / Pinia',
+      'Progressive Web Apps (PWA) — offline-first & installable',
+      'PostgreSQL — relational data modeling & backend persistence',
       'Auth, cart, checkout, real-world product flows',
     ],
     ariaLabel: 'Full-stack web development skills',
@@ -31,7 +32,7 @@ const skillCards: SkillCard[] = [
     bullets: [
       'NLP on 100K+ chatbot interactions (+15% intent accuracy)',
       'Cut escalations about 10 percent with Tableau dashboards',
-      'SQL / Python / Tableau',
+      'PostgreSQL / SQL / Python / Tableau',
     ],
     ariaLabel: 'Data and analytics skills',
   },

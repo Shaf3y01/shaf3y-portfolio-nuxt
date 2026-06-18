@@ -48,7 +48,7 @@ export default defineNuxtConfig({
         },
         { name: "twitter:image", content: "https://YOUR-SITE.netlify.app/og-card.png" },
       ],
-      link: [{ rel: "icon", type: "image/png", href: "/favicon.ico" }],
+      link: [{ rel: "icon", type: "image/png", href: "/me.png" }],
     },
   },
 
