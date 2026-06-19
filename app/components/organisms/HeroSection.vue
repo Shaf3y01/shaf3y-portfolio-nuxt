@@ -10,10 +10,14 @@ const locale = computed(() => (lang.value === 'ar' ? ar : en))
 
 const fullName = computed(() => locale.value.hero.name)
 
-const typedName = ref('')
+const fTypedName = ref('')
+const lTypedName = ref('')
 const typedRole = ref('')
 const typedTagline = ref('')
 const showTaglineCursor = ref(false)
+
+const fullFirst = computed(() => fullName.value.split(' ')[0] ?? '')
+const fullLast = computed(() => fullName.value.split(' ').slice(1).join(' '))
 
 let timers: ReturnType<typeof setInterval | typeof setTimeout>[] = []
 
@@ -22,9 +26,43 @@ function clearTimers() {
   timers = []
 }
 
+function startRoleAnimation() {
+  const fullRole = locale.value.hero.role
+  const fullTagline = locale.value.hero.tagline
+  const t1 = setTimeout(() => {
+    let j = 0
+    const roleTimer = setInterval(() => {
+      typedRole.value += fullRole[j] ?? ''
+      j++
+      if (j >= fullRole.length) {
+        clearInterval(roleTimer)
+        const t2 = setTimeout(() => {
+          showTaglineCursor.value = true
+          let k = 0
+          const taglineTimer = setInterval(() => {
+            typedTagline.value += fullTagline[k] ?? ''
+            k++
+            if (k >= fullTagline.length) clearInterval(taglineTimer)
+          }, 20)
+          timers.push(taglineTimer)
+        }, 300)
+        timers.push(t2)
+      }
+    }, 30)
+    timers.push(roleTimer)
+  }, 300)
+  timers.push(t1)
+}
+
 function showInstant() {
   clearTimers()
-  typedName.value = fullName.value
+  if (lang.value === 'en') {
+    fTypedName.value = fullFirst.value
+    lTypedName.value = fullLast.value
+  } else {
+    fTypedName.value = fullName.value
+    lTypedName.value = ''
+  }
   typedRole.value = locale.value.hero.role
   typedTagline.value = locale.value.hero.tagline
   showTaglineCursor.value = true
@@ -32,47 +70,50 @@ function showInstant() {
 
 function runAnimation() {
   clearTimers()
-  typedName.value = ''
+  fTypedName.value = ''
+  lTypedName.value = ''
   typedRole.value = ''
   typedTagline.value = ''
   showTaglineCursor.value = false
 
-  const fullRole = locale.value.hero.role
-  const fullTagline = locale.value.hero.tagline
-
-  const name = fullName.value
-  let i = 0
-  const nameTimer = setInterval(() => {
-    typedName.value += name[i] ?? ''
-    i++
-    if (i >= name.length) {
-      clearInterval(nameTimer)
-      const t1 = setTimeout(() => {
-        let j = 0
-        const roleTimer = setInterval(() => {
-          typedRole.value += fullRole[j] ?? ''
-          j++
-          if (j >= fullRole.length) {
-            clearInterval(roleTimer)
-            const t2 = setTimeout(() => {
-              showTaglineCursor.value = true
-              let k = 0
-              const taglineTimer = setInterval(() => {
-                typedTagline.value += fullTagline[k] ?? ''
-                k++
-                if (k >= fullTagline.length) clearInterval(taglineTimer)
-              }, 20)
-              timers.push(taglineTimer)
-            }, 300)
-            timers.push(t2)
-          }
-        }, 30)
-        timers.push(roleTimer)
-      }, 300)
-      timers.push(t1)
-    }
-  }, 40)
-  timers.push(nameTimer)
+  if (lang.value === 'en') {
+    const first = fullFirst.value
+    const last = fullLast.value
+    let i = 0
+    const firstTimer = setInterval(() => {
+      fTypedName.value += first[i] ?? ''
+      i++
+      if (i >= first.length) {
+        clearInterval(firstTimer)
+        const tPause = setTimeout(() => {
+          let j = 0
+          const lastTimer = setInterval(() => {
+            lTypedName.value += last[j] ?? ''
+            j++
+            if (j >= last.length) {
+              clearInterval(lastTimer)
+              startRoleAnimation()
+            }
+          }, 40)
+          timers.push(lastTimer)
+        }, 150)
+        timers.push(tPause)
+      }
+    }, 40)
+    timers.push(firstTimer)
+  } else {
+    const name = fullName.value
+    let i = 0
+    const nameTimer = setInterval(() => {
+      fTypedName.value += name[i] ?? ''
+      i++
+      if (i >= name.length) {
+        clearInterval(nameTimer)
+        startRoleAnimation()
+      }
+    }, 40)
+    timers.push(nameTimer)
+  }
 }
 
 watch(lang, () => {
@@ -176,8 +217,9 @@ onBeforeUnmount(() => {
                    xl:text-[3.75rem] xl:leading-[1.15] font-display">
             <span class="text-seasalt">
               <template v-if="lang === 'en'">
-                <span>{{ fullName.split(' ')[0] }}</span>
-                <span class="inline-block whitespace-nowrap md:inline md:whitespace-normal"> {{ fullName.split(' ').slice(1).join(' ') }}</span>
+                <span>{{ fullFirst }}</span>
+                <br class="sm:hidden">
+                <span> {{ fullLast }}</span>
               </template>
               <template v-else>{{ fullName }}</template>
             </span>
@@ -202,14 +244,22 @@ onBeforeUnmount(() => {
                    text-center lg:text-left font-display"
               :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span class="text-seasalt">
-              <!-- EN: keep everything after the first space (El-Shafey) together -->
               <template v-if="lang === 'en'">
-                <span>{{ typedName.includes(' ') ? typedName.slice(0, typedName.indexOf(' ')) : typedName }}</span>
-                <span v-if="typedName.includes(' ')" class="inline-block whitespace-nowrap md:inline md:whitespace-normal"> {{ typedName.slice(typedName.indexOf(' ') + 1) }}</span>
+                <span>{{ fTypedName }}</span>
+                <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
+                  v-if="fTypedName.length < fullFirst.length"></span>
+                <template v-if="fTypedName.length === fullFirst.length && fullFirst.length > 0">
+                  <br class="sm:hidden">
+                  <span> {{ lTypedName }}</span>
+                  <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
+                    v-if="lTypedName.length < fullLast.length"></span>
+                </template>
               </template>
-              <template v-else>{{ typedName }}</template>
-              <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
-                v-if="typedName.length !== fullName.length"></span>
+              <template v-else>
+                {{ fTypedName }}
+                <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
+                  v-if="fTypedName.length !== fullName.length"></span>
+              </template>
             </span>
           </h1>
 
