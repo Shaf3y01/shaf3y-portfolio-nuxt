@@ -193,7 +193,8 @@ onBeforeUnmount(() => {
                    md:text-[3rem] md:leading-[1.15]
                    lg:text-[3.5rem] lg:leading-[1.15]
                    xl:text-[3.75rem] xl:leading-[1.15]
-                   text-center lg:text-left font-display">
+                   text-center lg:text-left font-display"
+              :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span class="text-seasalt">
               {{ typedName }}
               <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
@@ -206,7 +207,8 @@ onBeforeUnmount(() => {
                    text-xl md:text-2xl lg:text-[1.5rem] font-medium
                    flex flex-wrap justify-center lg:justify-start
                    text-lilac leading-snug
-                   text-center lg:text-left font-mono tracking-tight">
+                   text-center lg:text-left font-mono tracking-tight"
+               :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span>{{ typedRole }}</span>
             <span class="inline-block w-[1ch] bg-lilac/80 align-baseline animate-pulse"
               v-if="typedRole.length !== locale.hero.role.length"></span>
@@ -225,7 +227,7 @@ onBeforeUnmount(() => {
         </p>
 
         <!-- live type layer -->
-        <p class="absolute inset-0">
+        <p class="absolute inset-0" :dir="lang === 'ar' ? 'rtl' : 'ltr'">
           <span>{{ typedTagline }}</span>
           <!-- keep blinking FOREVER once tagline cursor shows -->
           <span v-if="showTaglineCursor" class="tagline-cursor align-baseline"></span>
