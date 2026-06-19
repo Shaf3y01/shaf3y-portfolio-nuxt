@@ -217,9 +217,7 @@ onBeforeUnmount(() => {
                    xl:text-[3.75rem] xl:leading-[1.15] font-display">
             <span class="text-seasalt">
               <template v-if="lang === 'en'">
-                <span>{{ fullFirst }}</span>
-                <br class="sm:hidden">
-                <span> {{ fullLast }}</span>
+                <span>{{ fullFirst }}</span><span class="hidden sm:inline">{{ ' ' }}</span><br class="sm:hidden"><span>{{ fullLast }}</span>
               </template>
               <template v-else>{{ fullName }}</template>
             </span>
@@ -249,8 +247,7 @@ onBeforeUnmount(() => {
                 <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
                   v-if="fTypedName.length < fullFirst.length"></span>
                 <template v-if="fTypedName.length === fullFirst.length && fullFirst.length > 0">
-                  <br class="sm:hidden">
-                  <span> {{ lTypedName }}</span>
+                  <span class="hidden sm:inline">{{ ' ' }}</span><br class="sm:hidden"><span>{{ lTypedName }}</span>
                   <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
                     v-if="lTypedName.length < fullLast.length"></span>
                 </template>
