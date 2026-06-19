@@ -11,6 +11,7 @@ export default {
   },
 
   hero: {
+    name: 'Mahmoud El-Shafey',
     role: 'Data Analyst & Fullstack Web Developer',
     tagline:
       'I build data-driven web experiences and intelligent dashboards that actually move metrics — not just look pretty.',

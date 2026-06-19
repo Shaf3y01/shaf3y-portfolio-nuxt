@@ -8,7 +8,7 @@ import ar from '@/locales/ar'
 const { lang } = useLocale()
 const locale = computed(() => (lang.value === 'ar' ? ar : en))
 
-const fullName = 'Mahmoud El-Shafey'
+const fullName = computed(() => locale.value.hero.name)
 
 const typedName = ref('')
 const typedRole = ref('')
@@ -24,7 +24,7 @@ function clearTimers() {
 
 function showInstant() {
   clearTimers()
-  typedName.value = fullName
+  typedName.value = fullName.value
   typedRole.value = locale.value.hero.role
   typedTagline.value = locale.value.hero.tagline
   showTaglineCursor.value = true
@@ -40,11 +40,12 @@ function runAnimation() {
   const fullRole = locale.value.hero.role
   const fullTagline = locale.value.hero.tagline
 
+  const name = fullName.value
   let i = 0
   const nameTimer = setInterval(() => {
-    typedName.value += fullName[i] ?? ''
+    typedName.value += name[i] ?? ''
     i++
-    if (i >= fullName.length) {
+    if (i >= name.length) {
       clearInterval(nameTimer)
       const t1 = setTimeout(() => {
         let j = 0
@@ -173,12 +174,7 @@ onBeforeUnmount(() => {
                    md:text-[3rem] md:leading-[1.15]
                    lg:text-[3.5rem] lg:leading-[1.15]
                    xl:text-[3.75rem] xl:leading-[1.15] font-display">
-            <span class="text-seasalt">
-              Mahmoud
-              <!-- force first/last name break for very tiny screens but DON'T split "El-" / "Shafey" -->
-              <span class="hidden [@media(max-width:425px)]:inline"><br /></span>
-              <span class="[@media(max-width:425px)]:inline-block whitespace-nowrap">&nbsp;El-Shafey</span>
-            </span>
+            <span class="text-seasalt">{{ fullName }}</span>
           </h1>
 
           <!-- final role -->
@@ -199,30 +195,7 @@ onBeforeUnmount(() => {
                    xl:text-[3.75rem] xl:leading-[1.15]
                    text-center lg:text-left font-display">
             <span class="text-seasalt">
-              <template v-if="typedName.length">
-                <!-- first chunk up to first space -->
-                <span>
-                  {{
-                    typedName.includes(' ')
-                      ? typedName.slice(0, typedName.indexOf(' '))
-                      : typedName
-                  }}
-                </span>
-                <span class="hidden [@media(max-width:425px)]:inline" v-if="typedName.includes(' ')">
-                  <br />
-                </span>
-                <span v-if="typedName.includes(' ')" class="[@media(max-width:425px)]:inline-block whitespace-nowrap">
-                  {{
-                    ' ' +
-                    typedName.slice(
-                      typedName.indexOf(' ') + 1,
-                      typedName.length
-                    )
-                  }}
-                </span>
-              </template>
-
-              <!-- blinking cursor while name still typing -->
+              {{ typedName }}
               <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
                 v-if="typedName.length !== fullName.length"></span>
             </span>
