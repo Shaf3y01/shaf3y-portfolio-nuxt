@@ -265,7 +265,7 @@ onBeforeUnmount(() => {
                    text-xl md:text-2xl lg:text-[1.5rem] font-medium
                    flex flex-wrap
                    text-lilac leading-snug font-mono tracking-tight"
-               :class="lang === 'ar' ? 'justify-center lg:justify-end text-center lg:text-right' : 'justify-center lg:justify-start text-center lg:text-left'"
+               :class="lang === 'ar' ? 'justify-center lg:justify-start text-center lg:text-right' : 'justify-center lg:justify-start text-center lg:text-left'"
                :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span>{{ typedRole }}</span>
             <span class="inline-block w-[1ch] bg-lilac/80 align-baseline animate-pulse"
