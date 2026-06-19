@@ -178,11 +178,11 @@ onBeforeUnmount(() => {
           </h1>
 
           <!-- final role -->
-          <p class="mt-4 md:mt-5 lg:mt-6
+          <p class="mt-4 md:mt-5 lg:mt-6 mb-6
                    text-xl md:text-2xl lg:text-[1.5rem] font-medium
                    flex flex-wrap justify-center lg:justify-start
                    text-lilac leading-snug font-mono tracking-tight">
-            {{ fullRole }}
+            {{ locale.hero.role }}
           </p>
         </div>
 
@@ -217,7 +217,7 @@ onBeforeUnmount(() => {
       </div>
 
       <!-- animated tagline (height reserved to prevent jump) -->
-      <div class="relative mt-6 text-seasalt/70
+      <div class="relative mt-10 text-seasalt/70
                text-base md:text-lg leading-relaxed
                text-center lg:text-left">
         <!-- invisible block to lock height (English version as baseline) -->
