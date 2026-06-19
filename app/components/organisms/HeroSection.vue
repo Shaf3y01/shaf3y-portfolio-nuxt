@@ -238,8 +238,8 @@ onBeforeUnmount(() => {
           <h1 class="text-[2.5rem] leading-tight font-semibold text-seasalt
                    md:text-[3rem] md:leading-[1.15]
                    lg:text-[3.5rem] lg:leading-[1.15]
-                   xl:text-[3.75rem] xl:leading-[1.15]
-                   text-center lg:text-left font-display"
+                   xl:text-[3.75rem] xl:leading-[1.15] font-display"
+              :class="lang === 'ar' ? 'text-center lg:text-right' : 'text-center lg:text-left'"
               :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span class="text-seasalt">
               <template v-if="lang === 'en'">
@@ -263,9 +263,9 @@ onBeforeUnmount(() => {
           <!-- animated role + cursor -->
           <div class="mt-4 md:mt-5 lg:mt-6 mb-6
                    text-xl md:text-2xl lg:text-[1.5rem] font-medium
-                   flex flex-wrap justify-center lg:justify-start
-                   text-lilac leading-snug
-                   text-center lg:text-left font-mono tracking-tight"
+                   flex flex-wrap
+                   text-lilac leading-snug font-mono tracking-tight"
+               :class="lang === 'ar' ? 'justify-center lg:justify-end text-center lg:text-right' : 'justify-center lg:justify-start text-center lg:text-left'"
                :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span>{{ typedRole }}</span>
             <span class="inline-block w-[1ch] bg-lilac/80 align-baseline animate-pulse"
@@ -276,8 +276,8 @@ onBeforeUnmount(() => {
 
       <!-- animated tagline (height reserved to prevent jump) -->
       <div class="relative mt-10 text-seasalt/70
-               text-base md:text-lg leading-relaxed
-               text-center lg:text-left">
+               text-base md:text-lg leading-relaxed"
+           :class="lang === 'ar' ? 'text-center lg:text-right' : 'text-center lg:text-left'">
         <!-- invisible block to lock height (English version as baseline) -->
         <p class="invisible">
           I build data-driven web experiences and intelligent dashboards that
