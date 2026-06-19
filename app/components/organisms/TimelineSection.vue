@@ -1,6 +1,6 @@
 <!-- directory: app/components/organisms/TimelineSection.vue -->
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import SectionHeader from '@/components/molecules/SectionHeader.vue'
 import { useLocale } from '@/composables/useLocale'
 import en from '@/locales/en'
@@ -44,6 +44,19 @@ onMounted(() => {
             .forEach(el => observer?.observe(el))
     })
 })
+
+function observeAll() {
+    if (!observer) return
+    observer.disconnect()
+    visible.value = Array(items.value.length).fill(false)
+    nextTick(() => {
+        document
+            .querySelectorAll<HTMLElement>('[data-timeline-card]')
+            .forEach(el => observer?.observe(el))
+    })
+}
+
+watch(lang, observeAll)
 
 onBeforeUnmount(() => {
     if (observer) {
