@@ -177,7 +177,7 @@ onBeforeUnmount(() => {
             <span class="text-seasalt">
               <template v-if="lang === 'en'">
                 <span>{{ fullName.split(' ')[0] }}</span>
-                <span class="whitespace-nowrap">&nbsp;{{ fullName.split(' ').slice(1).join(' ') }}</span>
+                <span class="inline-block whitespace-nowrap"> {{ fullName.split(' ').slice(1).join(' ') }}</span>
               </template>
               <template v-else>{{ fullName }}</template>
             </span>
@@ -205,7 +205,7 @@ onBeforeUnmount(() => {
               <!-- EN: keep everything after the first space (El-Shafey) together -->
               <template v-if="lang === 'en'">
                 <span>{{ typedName.includes(' ') ? typedName.slice(0, typedName.indexOf(' ')) : typedName }}</span>
-                <span v-if="typedName.includes(' ')" class="whitespace-nowrap">&nbsp;{{ typedName.slice(typedName.indexOf(' ') + 1) }}</span>
+                <span v-if="typedName.includes(' ')" class="inline-block whitespace-nowrap"> {{ typedName.slice(typedName.indexOf(' ') + 1) }}</span>
               </template>
               <template v-else>{{ typedName }}</template>
               <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
