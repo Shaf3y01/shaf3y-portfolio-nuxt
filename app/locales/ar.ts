@@ -60,7 +60,7 @@ export default {
     viewCode: 'عرض الكود',
     items: [
       {
-        name: 'إيميرا للتطوير العقاري',
+        name: 'عميرة للتطوير العقاري',
         desc: 'موقع احترافي لشركة إنشاءات وعقارات مصرية رائدة، يتضمن عرض المشاريع وملف الشركة وقنوات التواصل.',
         img: '/projects/emera-img.png',
         stack: ['Nuxt', 'Vue', 'TypeScript', 'TailwindCSS'],
@@ -195,7 +195,7 @@ export default {
         ],
       },
       {
-        title: 'مرشد علوم الحاسب',
+        title: 'معلم علوم الحاسب',
         org: 'iSchool / Techy School / STEM Zone',
         date: 'أغسطس 2023 – نوفمبر 2024',
         bullets: [
