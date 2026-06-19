@@ -203,7 +203,7 @@ onBeforeUnmount(() => {
           </h1>
 
           <!-- animated role + cursor -->
-          <div class="mt-4 md:mt-5 lg:mt-6
+          <div class="mt-4 md:mt-5 lg:mt-6 mb-6
                    text-xl md:text-2xl lg:text-[1.5rem] font-medium
                    flex flex-wrap justify-center lg:justify-start
                    text-lilac leading-snug
