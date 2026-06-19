@@ -174,7 +174,13 @@ onBeforeUnmount(() => {
                    md:text-[3rem] md:leading-[1.15]
                    lg:text-[3.5rem] lg:leading-[1.15]
                    xl:text-[3.75rem] xl:leading-[1.15] font-display">
-            <span class="text-seasalt">{{ fullName }}</span>
+            <span class="text-seasalt">
+              <template v-if="lang === 'en'">
+                <span>{{ fullName.split(' ')[0] }}</span>
+                <span class="whitespace-nowrap">&nbsp;{{ fullName.split(' ').slice(1).join(' ') }}</span>
+              </template>
+              <template v-else>{{ fullName }}</template>
+            </span>
           </h1>
 
           <!-- final role -->
@@ -196,7 +202,12 @@ onBeforeUnmount(() => {
                    text-center lg:text-left font-display"
               :dir="lang === 'ar' ? 'rtl' : 'ltr'">
             <span class="text-seasalt">
-              {{ typedName }}
+              <!-- EN: keep everything after the first space (El-Shafey) together -->
+              <template v-if="lang === 'en'">
+                <span>{{ typedName.includes(' ') ? typedName.slice(0, typedName.indexOf(' ')) : typedName }}</span>
+                <span v-if="typedName.includes(' ')" class="whitespace-nowrap">&nbsp;{{ typedName.slice(typedName.indexOf(' ') + 1) }}</span>
+              </template>
+              <template v-else>{{ typedName }}</template>
               <span class="inline-block w-[1ch] bg-seasalt align-baseline animate-pulse"
                 v-if="typedName.length !== fullName.length"></span>
             </span>
