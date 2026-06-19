@@ -24,3 +24,29 @@
 html {
   scroll-behavior: smooth;
 }
+
+/* ─── Day mode global overrides ─────────────────────────────── */
+[data-theme='day'] body {
+  background-color: var(--color-seasalt);
+  color: var(--color-eerie);
+}
+
+/* Invert text-seasalt utilities on light background */
+[data-theme='day'] .text-seasalt        { color: var(--color-eerie) !important; }
+[data-theme='day'] .text-seasalt\/90    { color: rgba(34,40,35,0.9) !important; }
+[data-theme='day'] .text-seasalt\/80    { color: rgba(34,40,35,0.8) !important; }
+[data-theme='day'] .text-seasalt\/70    { color: rgba(34,40,35,0.7) !important; }
+[data-theme='day'] .text-seasalt\/60    { color: rgba(34,40,35,0.6) !important; }
+[data-theme='day'] .text-seasalt\/50    { color: rgba(34,40,35,0.5) !important; }
+[data-theme='day'] .text-seasalt\/40    { color: rgba(34,40,35,0.4) !important; }
+
+/* Flip glass card surfaces */
+[data-theme='day'] .bg-white\/5        { background-color: rgba(0,0,0,0.04) !important; }
+[data-theme='day'] .bg-white\/10       { background-color: rgba(0,0,0,0.07) !important; }
+[data-theme='day'] .border-white\/10   { border-color: rgba(0,0,0,0.12) !important; }
+[data-theme='day'] .border-white\/15   { border-color: rgba(0,0,0,0.15) !important; }
+[data-theme='day'] .border-white\/20   { border-color: rgba(0,0,0,0.18) !important; }
+[data-theme='day'] .border-white\/30   { border-color: rgba(0,0,0,0.22) !important; }
+
+/* Typing cursor uses dark colour in day mode */
+[data-theme='day'] .tagline-cursor     { background-color: var(--color-byzantium) !important; }

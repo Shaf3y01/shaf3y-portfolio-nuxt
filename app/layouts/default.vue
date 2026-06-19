@@ -1,11 +1,25 @@
 <!-- directory: app/layouts/default.vue -->
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount } from 'vue'
+import { computed, onMounted, onBeforeUnmount } from 'vue'
 import { useClickParticles } from '@/composables/useClickParticles'
+import { useTheme } from '@/composables/useTheme'
+import { useLocale } from '@/composables/useLocale'
 
 const { enable, disable } = useClickParticles()
+const { theme, initTheme } = useTheme()
+const { lang, initLang } = useLocale()
+
+useHead({
+  htmlAttrs: computed(() => ({
+    'data-theme': theme.value,
+    dir: lang.value === 'ar' ? 'rtl' : 'ltr',
+    lang: lang.value,
+  })),
+})
 
 onMounted(() => {
+  initTheme()
+  initLang()
   enable()
 })
 
@@ -16,7 +30,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div
-    class="min-h-screen bg-eerie text-seasalt antialiased relative overflow-hidden"
+    :class="theme === 'day' ? 'bg-seasalt text-eerie' : 'bg-eerie text-seasalt'"
+    class="min-h-screen antialiased relative overflow-hidden transition-colors duration-300"
   >
     <!-- global purple glow in background -->
     <div

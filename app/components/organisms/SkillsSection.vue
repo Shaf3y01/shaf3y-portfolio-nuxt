@@ -1,73 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import SectionHeader from '@/components/molecules/SectionHeader.vue'
+import { useLocale } from '@/composables/useLocale'
+import en from '@/locales/en'
+import ar from '@/locales/ar'
 
-interface SkillCard {
-  icon: string
-  title: string
-  description: string
-  bullets: string[]
-  ariaLabel: string
-}
+const { lang } = useLocale()
+const locale = computed(() => (lang.value === 'ar' ? ar : en))
 
-const skillCards: SkillCard[] = [
-  {
-    icon: 'mdi:laptop',
-    title: 'Full-Stack Web Development',
-    description:
-      'I design and build complete user experiences - from landing pages and dashboards all the way to checkout flows and performance tuning.',
-    bullets: [
-      'Vue / Nuxt / TypeScript / Tailwind / Pinia',
-      'Progressive Web Apps (PWA) — offline-first & installable',
-      'PostgreSQL — relational data modeling & backend persistence',
-      'Auth, cart, checkout, real-world product flows',
-    ],
-    ariaLabel: 'Full-stack web development skills',
-  },
-  {
-    icon: 'mdi:chart-line',
-    title: 'Data & Analytics',
-    description:
-      'I use data to drive product decisions and reduce friction across support and sales funnels.',
-    bullets: [
-      'NLP on 100K+ chatbot interactions (+15% intent accuracy)',
-      'Cut escalations about 10 percent with Tableau dashboards',
-      'PostgreSQL / SQL / Python / Tableau',
-    ],
-    ariaLabel: 'Data and analytics skills',
-  },
-  {
-    icon: 'mdi:rocket-launch-outline',
-    title: 'Shipping & Impact',
-    description:
-      'I build solutions that solve real problems and increase conversion, not just "look nice in a Dribbble shot."',
-    bullets: [
-      'High-converting restaurant landing page for Al-Kheima',
-      'Grover grocery app with cart and live availability',
-      'E-commerce storefront with variants and checkout',
-    ],
-    ariaLabel: 'Shipping and product impact skills',
-  },
-  {
-    icon: 'mdi:account-school-outline',
-    title: 'Mentoring & Teaching',
-    description:
-      'I teach coding and problem-solving to early learners and new developers, focusing on clarity, confidence, and mindset.',
-    bullets: [
-      'Designed beginner-friendly web dev curriculum for teens',
-      'Trained logic using PRIMM (Predict + Run + Investigate + Modify + Make)',
-      'Helped students move from "copy code" to "I can build this"',
-    ],
-    ariaLabel: 'Mentoring and teaching skills',
-  },
-]
+const skillCards = computed(() => locale.value.skills.items)
 
 const isLargeScreen = ref(false)
 const gridVisible = ref(false)
-const cardVisible = ref<boolean[]>(Array(skillCards.length).fill(false))
+const cardVisible = ref<boolean[]>(Array(4).fill(false))
 
 const gridRef = ref<HTMLElement | null>(null)
-const cardRefs = ref<(HTMLElement | null)[]>(Array(skillCards.length).fill(null))
+const cardRefs = ref<(HTMLElement | null)[]>(Array(4).fill(null))
 
 let gridObserver: IntersectionObserver | null = null
 let cardObserver: IntersectionObserver | null = null
@@ -141,7 +89,7 @@ const setupObservers = () => {
   nextTick(() => {
     disconnectObservers()
     gridVisible.value = false
-    cardVisible.value = Array(skillCards.length).fill(false)
+    cardVisible.value = Array(4).fill(false)
 
     if (isLargeScreen.value) {
       setupLargeScreenObserver()
@@ -195,7 +143,7 @@ onBeforeUnmount(() => {
     class="py-20 lg:py-28 scroll-mt-24"
     aria-label="Skills and technology stack"
   >
-    <SectionHeader title="Skills & Stack" :center="true" />
+    <SectionHeader :title="locale.skills.header" :center="true" />
 
     <ul
       ref="gridRef"

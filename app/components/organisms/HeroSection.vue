@@ -1,58 +1,87 @@
 <!-- directory: app/components/organisms/HeroSection.vue -->
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { useLocale } from '@/composables/useLocale'
+import en from '@/locales/en'
+import ar from '@/locales/ar'
 
-/* ---------------------------
-   Typing animation (unchanged)
----------------------------- */
+const { lang } = useLocale()
+const locale = computed(() => (lang.value === 'ar' ? ar : en))
+
 const fullName = 'Mahmoud El-Shafey'
-const fullRole = 'Data Analyst & Fullstack Web Developer'
-const fullTagline =
-  'I build data-driven web experiences and intelligent dashboards that actually move metrics — not just look pretty.'
 
 const typedName = ref('')
 const typedRole = ref('')
 const typedTagline = ref('')
 const showTaglineCursor = ref(false)
 
-onMounted(() => {
-  // 1. type name
+let timers: ReturnType<typeof setInterval | typeof setTimeout>[] = []
+
+function clearTimers() {
+  timers.forEach(t => clearInterval(t as ReturnType<typeof setInterval>))
+  timers = []
+}
+
+function showInstant() {
+  clearTimers()
+  typedName.value = fullName
+  typedRole.value = locale.value.hero.role
+  typedTagline.value = locale.value.hero.tagline
+  showTaglineCursor.value = true
+}
+
+function runAnimation() {
+  clearTimers()
+  typedName.value = ''
+  typedRole.value = ''
+  typedTagline.value = ''
+  showTaglineCursor.value = false
+
+  const fullRole = locale.value.hero.role
+  const fullTagline = locale.value.hero.tagline
+
   let i = 0
   const nameTimer = setInterval(() => {
     typedName.value += fullName[i] ?? ''
     i++
     if (i >= fullName.length) {
       clearInterval(nameTimer)
-
-      // 2. then role
-      setTimeout(() => {
+      const t1 = setTimeout(() => {
         let j = 0
         const roleTimer = setInterval(() => {
           typedRole.value += fullRole[j] ?? ''
           j++
           if (j >= fullRole.length) {
             clearInterval(roleTimer)
-
-            // 3. then tagline
-            setTimeout(() => {
-              showTaglineCursor.value = true // <-- start blinking now & never stop
+            const t2 = setTimeout(() => {
+              showTaglineCursor.value = true
               let k = 0
               const taglineTimer = setInterval(() => {
                 typedTagline.value += fullTagline[k] ?? ''
                 k++
-                if (k >= fullTagline.length) {
-                  clearInterval(taglineTimer)
-                }
+                if (k >= fullTagline.length) clearInterval(taglineTimer)
               }, 20)
+              timers.push(taglineTimer)
             }, 300)
+            timers.push(t2)
           }
         }, 30)
+        timers.push(roleTimer)
       }, 300)
+      timers.push(t1)
     }
   }, 40)
+  timers.push(nameTimer)
+}
+
+watch(lang, () => {
+  showInstant()
 })
 
-/* -------------- */
+onMounted(() => {
+  runAnimation()
+})
+
 const workEmail = 'shaf3y.hired@gmail.com'
 function scrollToProjects() {
   const el = document.getElementById('projects')
@@ -108,9 +137,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  if (shuffleTimer) {
-    clearInterval(shuffleTimer)
-  }
+  clearTimers()
+  if (shuffleTimer) clearInterval(shuffleTimer)
 })
 </script>
 
@@ -208,7 +236,7 @@ onBeforeUnmount(() => {
                    text-center lg:text-left font-mono tracking-tight">
             <span>{{ typedRole }}</span>
             <span class="inline-block w-[1ch] bg-lilac/80 align-baseline animate-pulse"
-              v-if="typedRole.length !== fullRole.length"></span>
+              v-if="typedRole.length !== locale.hero.role.length"></span>
           </div>
         </div>
       </div>
@@ -217,7 +245,7 @@ onBeforeUnmount(() => {
       <div class="relative mt-6 text-seasalt/70
                text-base md:text-lg leading-relaxed
                text-center lg:text-left">
-        <!-- invisible block to lock height -->
+        <!-- invisible block to lock height (English version as baseline) -->
         <p class="invisible">
           I build data-driven web experiences and intelligent dashboards that
           actually move metrics — not just look pretty.
@@ -234,30 +262,27 @@ onBeforeUnmount(() => {
       <!-- CTA buttons -->
       <div class="mt-8 flex flex-col sm:flex-row flex-wrap
                items-center justify-center lg:justify-start gap-4">
-        <!-- View Work -->
         <button @click="scrollToProjects" class="px-5 py-3 rounded-[var(--radius-xl)]
                  bg-byzantium text-seasalt text-sm font-medium
                  shadow-[var(--shadow-glow-purple)]
                  hover:opacity-90 transition">
-          View Work
+          {{ locale.hero.cta.viewWork }}
         </button>
 
-        <!-- Contact Me -->
         <a class="px-5 py-3 rounded-[var(--radius-xl)]
                  bg-white/5 text-seasalt text-sm font-medium
                  border border-white/15 backdrop-blur-xl
                  hover:bg-white/10 transition" :href="`mailto:${workEmail}`">
-          Contact Me
+          {{ locale.hero.cta.contact }}
         </a>
 
-        <!-- Download CV -->
         <a class="px-5 py-3 rounded-[var(--radius-xl)]
                  bg-white/0 text-seasalt/70 text-sm font-medium
                  border border-white/15
                  hover:text-seasalt hover:bg-white/5 transition"
           href="https://drive.google.com/drive/folders/1YQQZ8UNYtvbC07pFpyh0_jVMAfFVd4DF?usp=sharing" target="_blank"
           download>
-          Download CV
+          {{ locale.hero.cta.downloadCV }}
         </a>
       </div>
 
@@ -265,26 +290,23 @@ onBeforeUnmount(() => {
       <div class="mt-8 flex flex-wrap gap-x-6 gap-y-3
                items-center justify-center lg:justify-start
                text-seasalt/60 text-sm">
-        <!-- GitHub -->
         <a href="https://github.com/Shaf3y01" target="_blank" rel="noopener noreferrer"
           class="group flex items-center gap-2 hover:text-seasalt transition"
           aria-label="Visit GitHub Profile">
           <Icon name="mdi:github" class="size-5 group-hover:scale-110 transition-transform" />
-          <span class="hidden sm:inline-block">GitHub</span>
+          <span class="hidden sm:inline-block">{{ locale.hero.social.github }}</span>
         </a>
 
-        <!-- LinkedIn -->
         <a href="https://www.linkedin.com/in/shaf3y01" target="_blank" rel="noopener noreferrer"
           class="group flex items-center gap-2 hover:text-seasalt transition"
           aria-label="Visit LinkedIn Profile">
           <Icon name="mdi:linkedin" class="size-5 group-hover:scale-110 transition-transform" />
-          <span class="hidden sm:inline-block">LinkedIn</span>
+          <span class="hidden sm:inline-block">{{ locale.hero.social.linkedin }}</span>
         </a>
 
-        <!-- Email -->
         <a :href="`mailto:${workEmail}`" class="group flex items-center gap-2 hover:text-seasalt transition" aria-label="Send Email">
           <Icon name="mdi:email-outline" class="size-5 group-hover:scale-110 transition-transform" />
-          <span class="hidden sm:inline-block">Email</span>
+          <span class="hidden sm:inline-block">{{ locale.hero.social.email }}</span>
         </a>
       </div>
     </div>

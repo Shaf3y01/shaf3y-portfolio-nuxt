@@ -1,78 +1,17 @@
 <!-- directory: app/components/organisms/TimelineSection.vue -->
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import SectionHeader from '@/components/molecules/SectionHeader.vue'
+import { useLocale } from '@/composables/useLocale'
+import en from '@/locales/en'
+import ar from '@/locales/ar'
 
-interface TimelineItem {
-    title: string
-    org: string
-    date: string
-    bullets: string[]
-}
+const { lang } = useLocale()
+const locale = computed(() => (lang.value === 'ar' ? ar : en))
 
-const items = ref<TimelineItem[]>([
-    {
-        title: 'Data Analyst (NLP / BI)',
-        org: 'Product & Support Analytics @Maids.cc',
-        date: 'Nov 2024 – May 2025',
-        bullets: [
-            'Spearheaded NLP analysis of 100K+ customer chatbot interactions, leading to a 15% lift in intent recognition accuracy and enhancing self-service resolution.',
-            'Optimized chatbot flow and reporting capabilities, directly resulting in an 18% reduction in human agent escalations and driving a 6.5% increase in conversion rates via support channels.',
-            'Designed and deployed 10+ interactive Tableau dashboards for Product, Operations, and Sales, establishing new KPIs for core business functions and improving data-driven decision-making.',
-        ],
-    }, {
-        title: 'Computer Science Mentor',
-        org: 'iSchool / Techy School / STEM Zone',
-        date: 'Aug, 2023 - Nov, 2024',
-        bullets: [
-            'Successfully utilized PRIMM to foster deep conceptual understanding and problem-solving skills, moving students beyond rote memorization to genuine coding proficiency.',
-            'Proven ability to create a dynamic and student-centered learning environment where teens gain confidence by actively running and debugging existing code examples.',
-            'Skilled at translating complex CS topics into relatable modules, empowering teens to build their own functional programs after carefully analyzing and adapting provided examples.'
-        ],
-    },
-    {
-        title: 'Networks Engineer, Summer Intern',
-        org: 'WE Telecoms, (Tanta, El-\'Agizy)',
-        date: '2023 July 26 – September 3, 2023',
-        bullets: [
-            'Successfully completed the intensive Cisco CCNA training program (200-301), mastering network fundamentals, IP connectivity, security concepts, and automation basics.',
-            'Developed foundational knowledge in network automation and programmability by exploring Python scripting and interpreting basic JSON data structures, as covered in the CCNA curriculum.',
-            'Demonstrated proficiency in monitoring and maintaining network performance by utilizing tools like Cisco Packet Tracer/EVE-NG and interpreting network utility outputs (e.g., ping, traceroute, syslog)'
-        ],
-    },
-    {
-        title: 'Full-Stack Web Developer (Freelance)',
-        org: 'E-Commerce & Landing Pages',
-        date: '2022 Aug – Present',
-        bullets: [
-            'Delivered 4+ production web builds (Grover grocery app, Al-Kheima restaurant landing, SuitSupply store).',
-            'Built fast, conversion-focused UIs with Vue/Nuxt + Tailwind and integrated features like cart, checkout, and auth.',
-        ],
-    },
-    {
-        title: 'Full-Stack (Nuxt/Laravel/) Web Development Diploma',
-        org: 'AMIT',
-        date: '2022 March – 2022 Aug',
-        bullets: [
-            'Developed and maintained full-stack web applications by building dynamic, component-based user interfaces with Vue.js and powering them with a robust Laravel (PHP) backend.',
-            'Managed application development and databases locally using the XAMPP environment (Apache, MySQL) before deployment.',
-            'Graduated Cohort 61, Madinet Nasr.'
-        ],
-    },
-    {
-        title: 'B.Sc. Computer Science',
-        org: 'Tanta University',
-        date: 'Sept, 2020 - June, 2025',
-        bullets: [
-            'Current GPA: 3.19 / 4.0.',
-            'Strong foundation in data analysis, software engineering, and problem solving.',
-            '3rd, in Top  5 Runners Graduation Project for 2024" Cohort'
-        ],
-    }
-])
+const items = computed(() => locale.value.timeline.items)
 
-// We'll track which ones are visible using IntersectionObserver.
-const visible = ref<boolean[]>(items.value.map(() => false))
+const visible = ref<boolean[]>(Array(6).fill(false))
 
 let observer: IntersectionObserver | null = null
 
@@ -115,7 +54,7 @@ onBeforeUnmount(() => {
 
 <template>
     <section id="timeline" class="py-20 lg:py-28 scroll-mt-24">
-        <SectionHeader title="Experience & Timeline" :center="false" />
+        <SectionHeader :title="locale.timeline.header" :center="false" />
 
         <div class="relative max-w-3xl mx-auto pl-6 md:pl-10">
             <!-- vertical line -->

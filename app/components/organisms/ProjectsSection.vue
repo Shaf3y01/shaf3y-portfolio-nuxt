@@ -1,7 +1,13 @@
 <!-- directory: app/components/organisms/ProjectsSection.vue -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import SectionHeader from '@/components/molecules/SectionHeader.vue'
+import { useLocale } from '@/composables/useLocale'
+import en from '@/locales/en'
+import ar from '@/locales/ar'
+
+const { lang } = useLocale()
+const locale = computed(() => (lang.value === 'ar' ? ar : en))
 
 interface Project {
   name: string
@@ -12,107 +18,38 @@ interface Project {
   link?: string
 }
 
-// static project list
-const projects: Project[] = [
-  {
-    name: 'Emera Developments',
-    desc: 'Professional website for a leading Egyptian construction and real estate company, featuring project showcases, company profile, and contact flows.',
-    img: '/projects/emera-img.png',
-    stack: ['Nuxt', 'Vue', 'TypeScript', 'TailwindCSS'],
-    github: '',
-    link: 'https://emera-developments.vercel.app',
-  },
-  {
-    name: 'Clinic Management PWA',
-    desc: 'Full-featured Progressive Web App built for El-Shorouk Health Office — managing patient records, appointments, and clinic operations with data persistence backed by PostgreSQL.',
-    img: '/projects/clinic-img.png',
-    stack: ['Nuxt', 'Vue', 'PostgreSQL'],
-    github: '',
-  },
-  {
-    name: 'Grover Grocery App',
-    desc: 'Online grocery shopping experience with cart, auth, and real-time live availability.',
-    img: '/projects/grover-img.jpg',
-    stack: ['HTML', 'CSS Animations', 'Vanilla JS', 'SVG', 'Bootstrap'],
-    github: 'https://github.com/Shaf3y01/Grover',
-  },
-  {
-    name: 'SIXTEEN CLOTHING STORE',
-    desc: 'Fully responsive storefront for teens and adults. Spiced with animations and transitions. Implemented with auth, cart, and checkout.',
-    img: '/projects/sixteen-cs-img.png',
-    stack: ['Vanilla JS', 'Owl Carousel', 'jQuery', 'HTML5', 'CSS Animations & Media Query'],
-    github: 'https://github.com/Shaf3y01/Clothing-Store',
-  },
-  {
-    name: 'Al-Kheima Restaurant',
-    desc: 'High-conversion restaurant landing page and a form focused on testing Flexbox and responsive Media Queries.',
-    img: '/projects/kheima-img.png',
-    stack: ['Vanilla JS', 'CSS Flexbox', 'HTML5'],
-    github: 'https://github.com/Shaf3y01/Al-Kheima',
-  },
-  {
-    name: 'SuitSupply Store',
-    desc: 'E-commerce storefront for suits apparel with filtering, variants, and checkout.',
-    img: '/projects/suitsupply-img.png',
-    stack: ['HTML5', 'CSS & Media Queries', 'Vanilla JS'],
-    github: 'https://github.com/Shaf3y01/SuitSupply',
-  },
-  {
-    name: 'M Power Gym',
-    desc: 'Innovative gym landing page using CSS animations and Vanilla JS for smooth UI/UX.',
-    img: '/projects/mpower-img.png', // ✅ fixed: added leading slash
-    stack: ['HTML5', 'CSS Animations', 'Media Query', 'Vanilla JS'],
-    github: 'https://github.com/Shaf3y01/MPowerGym',
-  },
-  {
-    name: 'Company Sales Analysis',
-    desc: 'Cleaned, transformed, and analyzed company data for sales insights and better future marketing strategies.',
-    img: '/projects/power-bi-project-1.png',
-    stack: ['Python', 'Power BI', 'Statistics'],
-    github: 'https://github.com/Sha3fy01',
-  },
-  {
-    name: 'NLP Support Insights',
-    desc: 'Analyzed 100K+ chatbot messages with NLP to boost intent accuracy by 15% and cut escalations 10%.',
-    img: 'https://placehold.co/600x400/FFFFFF/C8A2C8/png?text=DA',
-    stack: ['Python', 'NLP', 'Tableau', 'SQL'],
-    github: 'https://github.com/your-github/nlp-analytics',
-  },
-]
+const projects = computed<Project[]>(() => locale.value.projects.items)
 
 const current = ref<number>(0)
 const direction = ref<'next' | 'prev'>('next')
 
-// unique key so <Transition> knows when to animate
+watch(lang, () => { current.value = 0 })
+
 const cardKey = computed<string>(() => {
-  const p = projects[current.value]!
+  const p = projects.value[current.value]!
   return `${current.value}-${p.name}`
 })
 
-// active (front) project
-const activeProject = computed<Project>(() => {
-  return projects[current.value]!
-})
+const activeProject = computed<Project>(() => projects.value[current.value]!)
 
-// next preview (the blurred stacked card behind)
 const nextPreview = computed<Project>(() => {
-  const idx = (current.value + 1) % projects.length
-  return projects[idx]!
+  const idx = (current.value + 1) % projects.value.length
+  return projects.value[idx]!
 })
 
-const projectCount = computed<number>(() => projects.length)
+const projectCount = computed<number>(() => projects.value.length)
 
 const activeUrl = computed(() => activeProject.value.link || activeProject.value.github || '')
 const isLiveLink = computed(() => !!activeProject.value.link)
 
 function nextProject() {
   direction.value = 'next'
-  current.value = (current.value + 1) % projects.length
+  current.value = (current.value + 1) % projects.value.length
 }
 
 function prevProject() {
   direction.value = 'prev'
-  current.value = (current.value - 1 + projects.length) % projects.length
+  current.value = (current.value - 1 + projects.value.length) % projects.value.length
 }
 </script>
 
@@ -122,7 +59,7 @@ function prevProject() {
     class="projects-section py-20 lg:py-28 scroll-mt-24"
     aria-label="Featured project case studies"
   >
-    <SectionHeader title="Featured Work" :center="true" />
+    <SectionHeader :title="locale.projects.header" :center="true" />
 
     <div class="relative flex flex-col items-center">
       <!-- background / stacked preview card (subtle depth) -->
@@ -222,7 +159,7 @@ function prevProject() {
                   class="size-4 mr-2 opacity-80 transition-opacity duration-300"
                   aria-hidden="true"
                 />
-                <span class="text-seasalt/70">{{ isLiveLink ? 'View Site' : 'View Code' }}</span>
+                <span class="text-seasalt/70">{{ isLiveLink ? locale.projects.viewSite : locale.projects.viewCode }}</span>
               </div>
             </div>
 
@@ -261,7 +198,7 @@ function prevProject() {
           aria-label="Show previous project"
         >
           <Icon name="mdi:chevron-left" class="size-5" aria-hidden="true" />
-          <span class="hidden sm:inline-block">Prev</span>
+          <span class="hidden sm:inline-block">{{ locale.projects.prev }}</span>
         </button>
 
         <button
@@ -272,7 +209,7 @@ function prevProject() {
           @click.stop.prevent="nextProject"
           aria-label="Show next project"
         >
-          <span class="hidden sm:inline-block">Next</span>
+          <span class="hidden sm:inline-block">{{ locale.projects.next }}</span>
           <Icon name="mdi:chevron-right" class="size-5" aria-hidden="true" />
         </button>
       </div>
