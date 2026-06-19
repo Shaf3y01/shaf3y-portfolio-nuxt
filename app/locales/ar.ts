@@ -224,7 +224,7 @@ export default {
         ],
       },
       {
-        title: 'دبلوم تطوير الويب متكامل الجانبين (Nuxt/Laravel)',
+        title: 'دبلومة تطوير الويب متكامل الجانبين (Nuxt/Laravel)',
         org: 'AMIT',
         date: 'مارس 2022 – أغسطس 2022',
         bullets: [
